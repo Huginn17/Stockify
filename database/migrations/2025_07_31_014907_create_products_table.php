@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id');
-            $table->foreignId('supplier_id');
             $table->string('name');
             $table->string('sku');
             $table->text('description')->nullable();

@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('stock_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id');
-            $table->foreignId('user_id');
-            $table->enum('type', ['masuk', 'keluar']);
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->enum('type', ['masuk', 'keluar','opname']);
             $table->integer('quantity');
             $table->date('date');
-            $table->enum('status', ['pending', 'approved', 'rejected']);
+            $table->enum('status', ['pending', 'Diterima', 'Ditolak', 'Dikeluarkan'])->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();
         });
-    }
+    }   
 
     /**
      * Reverse the migrations.

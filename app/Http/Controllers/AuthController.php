@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,8 +27,24 @@ class AuthController extends Controller
             'password' =>  $request->password
         ];
 
+        $remember = $request->has('remember');
 
-        if (Auth::attempt($infologin)) {
+        if (Auth::attempt($infologin, $remember)) {
+            $request->session()->regenerate();
+
+            $user = Auth::user();
+            activity_log(
+                'Login',
+                "User {$user->name} Login sebagai {$user->role}",
+                'Auth',
+                [
+                    'user_id' => $user->id,
+                    'role' => $user->role,
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+
+                ]
+            );
             if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
             } elseif (Auth::user()->role == 'manajer_cabang') {
@@ -36,12 +53,28 @@ class AuthController extends Controller
                 return redirect()->route('staff.dashboard');
             }
         } else {
+
             return redirect('/login')->withErrors('Email Atau Password Salah')->withInput();
         }
     }
 
     public function logout(Request $request)
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            activity_log(
+                'Logout',
+                "User {$user->name} Logout",
+                'Auth',
+                [
+                    'user_id' => $user->id,
+                    'role' => $user->role,
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                ]
+            );
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

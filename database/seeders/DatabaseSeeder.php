@@ -69,5 +69,6 @@ class DatabaseSeeder extends Seeder
                 'phone' => '0812345678',
                 'email' => 'honda@gmail.com'
             ]);
+            
     }
 }

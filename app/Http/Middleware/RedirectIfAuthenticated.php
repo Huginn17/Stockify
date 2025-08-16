@@ -19,12 +19,18 @@ class RedirectIfAuthenticated
     {
         $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
+       if (Auth::check()) {
+        $role = Auth::user()->role;
+        
+        if ($role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($role === 'manajer_cabang') {
+            return redirect()->route('manajer.dashboard');
+        } elseif ($role === 'staff_gudang') {
+            return redirect()->route('staff.dashboard');
         }
+    }
 
-        return $next($request);
+    return $next($request);
     }
 }

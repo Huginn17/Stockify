@@ -1,3 +1,6 @@
+@php
+    $setting = \App\Models\Setting::pluck('value', 'key');
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +10,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" sizes="512x512" type="image/png" href="{{ asset('Stockify_orange.png') }}">
+
     <title>Stockify Staff</title>
 </head>
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -14,7 +19,8 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-<body>
+
+<body style="background-color: orange">
 
     <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar"
         aria-controls="sidebar-multi-level-sidebar" type="button"
@@ -31,14 +37,16 @@
     <aside id="sidebar-multi-level-sidebar"
         class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-            <h1 style="color: blue">Stockify</h1>
-            <hr border="1" style="color: gray">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-800">
+            <h1 style="color: orange">
+                {{ $setting['apk_name'] ?? 'Stockify' }}</h1>
+            <hr style="border: none; height: 1px; background-color: rgb(68, 68, 68);">
             <ul class="space-y-2 font-medium">
-                <li>
-                    <a href="#"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                <li class="{{ request()->is('staff/dashboard') ? 'bg-orange-600' : '' }} sm:rounded">
+                    <a href="{{ route('staff.dashboard') }}"
+                        class="flex items-center p-2 text-gray-900 rounded dark:text-white hover:bg-orange-600 dark:hover:bg-gray-700 group"
+                        style="text-decoration: none">
+                        <svg class="w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 22 21">
                             <path
@@ -46,29 +54,31 @@
                             <path
                                 d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                         </svg>
-                        <span class="ms-4">Dashboard</span>
+                        <span class="ms-4" style="color: white">Dashboard</span>
                     </a>
                 </li>
-                  <li>
-                    <a href="#"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                            viewBox="0 0 24 24">
+                <li class="{{ request()->is('staff/konfirmasi') ? 'bg-orange-600' : '' }} sm:rounded">
+                    <a href="{{ route('staff.konfirmasi') }}"
+                        class="flex items-center p-2 text-gray-900 rounded dark:text-white hover:bg-orange-600 dark:hover:bg-gray-700 group"
+                        style="text-decoration: none">
+                        <svg class="w-6 h-6 text-white transition duration-75  group-hover:text-gray-900 dark:group-hover:text-white"
+                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 4v15a1 1 0 0 0 1 1h15M8 16l2.5-5.5 3 3L17.273 7 20 9.667" />
                         </svg>
 
-                        <span class="flex-1 ms-3 whitespace-nowrap">Stok</span>
-                        <span
-                            class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">55</span>
+                        <span class="flex-1 ms-3 whitespace-nowrap" style="color: white">Stok</span>
                     </a>
-                </li>   
+                </li>
             </ul>
-            @include('staff.logout')
+            <hr style="border: none; height: 1px; background-color: rgb(68, 68, 68); position: relative; top: 350px;">
+            <li style="position: relative; top: 200px;">
+                @include('staff.logout')
+            </li>
         </div>
     </aside>
-    @yield('contentadmin')
+    @yield('contentstaff')
 </body>
 
 </html>
